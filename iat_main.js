@@ -122,9 +122,9 @@ function iatBase(categories, target, instruct)  {
 		if (code == 69 && (correctCategory==categories.Position1) ) {
 			this.removeEventListener('keydown',arguments.callee,false);
 					
-			experimentData.push(String(blockData[0]) + "   " + categories.Position1 + "   " + categories.Position2 + "   " +
-				categories.Target1 + "   " + categories.Target2 + "   " + 
-				target + "   " + String( (stopTime - startTime) ) + "\n");
+			experimentData.push(String(blockData[0]) + "," + categories.Position1 + "," + categories.Position2 + "," +
+				categories.Target1 + "," + categories.Target2 + "," + String( targetSide ) + "," +   
+				target + "," + String( (stopTime - startTime) ) + "\n");
 			
 			//Clear screen and timeout and wait 500 ms before next trial
 			ctx.fillStyle="black";
@@ -134,7 +134,7 @@ function iatBase(categories, target, instruct)  {
 			
 			setTimeout(function() {
 				trialController();
-					},500)
+					},postTrialPause)
 			
 			}
 		
@@ -142,10 +142,10 @@ function iatBase(categories, target, instruct)  {
 		else if (code == 73 && (correctCategory==categories.Position2) ) {
 			this.removeEventListener('keydown',arguments.callee,false);
 					
-			experimentData.push(String(blockData[0]) + "   " + categories.Position1 + "   " + categories.Position2 + "   " +
-				categories.Target1 + "   " + categories.Target2 + "   " + 
-				target + "   " + String( (stopTime - startTime) ) + "\n");
-			
+			experimentData.push(String(blockData[0]) + "," + categories.Position1 + "," + categories.Position2 + "," +
+				categories.Target1 + "," + categories.Target2 + "," + String( targetSide ) + "," +   
+				target + "," + String( (stopTime - startTime) ) + "\n");
+				
 			//Clear screen and wait 500 ms before next trial
 			ctx.fillStyle="black";
 			ctx.fillRect((ctx.canvas.width/2)-width/2 , (ctx.canvas.height/2)-height, width*1.5, height*1.5);
@@ -154,16 +154,16 @@ function iatBase(categories, target, instruct)  {
 			
 			setTimeout(function() {
 				trialController();
-					},500)
+					},postTrialPause)
 			}
 		
 		//Key is E and target stimuli goes with target category drawn on the same side
 		else if (code == 69 && ( (correctCategory=='Target1' && targetSide==0) || (correctCategory=='Target2' && targetSide==1) ) ) {
 			this.removeEventListener('keydown',arguments.callee,false);
 					
-			experimentData.push(String(blockData[0]) + "   " + categories.Position1 + "   " + categories.Position2 + "   " +
-				categories.Position3 + "   " + categories.Position4 + "   " + 
-				target + "   " + String( (stopTime - startTime) ) + "\n");
+			experimentData.push(String(blockData[0]) + "," + categories.Position1 + "," + categories.Position2 + "," +
+				categories.Target1 + "," + categories.Target2 + "," + String( targetSide ) + "," +   
+				target + "," + String( (stopTime - startTime) ) + "\n");
 			
 			//Clear screen and wait 500 ms before next trial
 			ctx.fillStyle="black";
@@ -173,16 +173,16 @@ function iatBase(categories, target, instruct)  {
 			
 			setTimeout(function() {
 				trialController();
-					},500)
+					},postTrialPause)
 			}
 		
 		//Key is I and target stimuli goes with target category drawn on the same side
 		else if (code == 73 && ( (correctCategory=='Target2' && targetSide==0) || (correctCategory=='Target1' && targetSide==1) ) ) {
 			this.removeEventListener('keydown',arguments.callee,false);
 					
-			experimentData.push(String(blockData[0]) + "   " + categories.Position1 + "   " + categories.Position2 + "   " +
-				categories.Position3 + "   " + categories.Position4 + "   " + 
-				target + "   " + String( (stopTime - startTime) ) + "\n");
+			experimentData.push(String(blockData[0]) + "," + categories.Position1 + "," + categories.Position2 + "," +
+				categories.Target1 + "," + categories.Target2 + "," + String( targetSide ) + "," +   
+				target + "," + String( (stopTime - startTime) ) + "\n");
 			
 			//Clear screen and wait 500 ms before next trial
 			ctx.fillStyle="black";
@@ -192,7 +192,7 @@ function iatBase(categories, target, instruct)  {
 			
 			setTimeout(function() {
 				trialController();
-					},500)
+					},postTrialPause)
 			}
 		
 		//Keypress was incorrect
@@ -222,12 +222,25 @@ function iatBase(categories, target, instruct)  {
 function trialController()  {
 	
 	console.log("Trial controller starting");
+	
 		
 	//Calls the baseIat function while there are still trials left in block
 	if(trialsInBlock > 0) {
-		//code to select one random target from the list
-		var randIndex = Math.floor(Math.random()*targetArray.length);
-		var target = targetArray[randIndex];
+		var target;
+		//If alternating flag is set pick randomly from each list every other trial
+		if(alternating == "yes") {
+			if( (trialsInBlock % 2) == 1 ) { 
+				target = targetArray1[Math.floor(Math.random()*targetArray1.length)];  
+			}
+			else {                           
+				target = targetArray2[Math.floor(Math.random()*targetArray2.length)]; 
+			}
+		}
+		//If alternating flag is not set pick only from first list
+		else {
+			target = targetArray1[Math.floor(Math.random()*targetArray1.length)];
+			}
+		
 		trialsInBlock = trialsInBlock - 1;  //decrement number of trials remaining
 		
 		//start the trial
@@ -268,7 +281,9 @@ function blockController(blockData)  {
 			console.log(blockConfig);
 	})
 	).then(function()  {
-		targetArray = blockConfig.targets;
+		targetArray1 = blockConfig.targets1;
+		targetArray2 = blockConfig.targets2;
+		alternating = blockConfig.alternating;
 		trialsInBlock = blockConfig.numberOfTrials;
 		trialCategories = blockConfig.categories;
 		trialInstructions = blockConfig.trialInstructions;
@@ -317,6 +332,7 @@ function loadConfig() {
 			introScreenText = mainCfg.introScreen;
 			instructionScreenText = mainCfg.instructionScreen;
 			endScreenText = mainCfg.endScreen;
+			postTrialPause = mainCfg.postTrialPause;
 					
 			} )
 		).then(function() {
@@ -474,6 +490,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
 //Configuration data
 var blockData = new Array();
 var localServerPath;
+var postTrialPause;
 var targetSide = Math.floor(Math.random()*2);  //randomly places the target category on one side
 
 //Experiment data
@@ -487,7 +504,9 @@ var endScreenText;
 
 //Block Configuration Data
 //set every new block by the block controller
-var targetArray;
+var targetArray1;
+var targetArray2;
+var alternating;
 var trialsInBlock;
 var	trialCategories;
 var trialInstructions;
