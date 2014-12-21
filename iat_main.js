@@ -67,7 +67,7 @@ function iatBase(categories, target, instruct)  {
   //The targets string for each stimuli contains an identifier that specifies if its
   //an image or a text stimuli followed by the actual text or the image location and
   //the correct response type for that category.  Split and store in variables.
-  var targetString = target.split(/\s+/);    
+  var targetString = target.split(",");    
   var targetIdentifier = targetString[0];
   var targetValue = targetString[1];
   var correctCategory = targetString[2];
@@ -465,24 +465,30 @@ function endScreen(randCode) {
 
 
 //Utility function for wrapping text in a html5 canvas
-//lovingly stolen from my boy Mitesh Maheta, a real og
+//modified from example by Mitesh Maheta, a real og
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
-        var words = text.split(" ");
-        var line = "";
-        for(var n = 0; n < words.length; n++) {
-          var testLine = line + words[n] + " ";
-          var metrics = context.measureText(testLine);
-          var testWidth = metrics.width;
-          if(testWidth > maxWidth) {
-            context.fillText(line, x, y);
-            line = words[n] + " ";
-            y += lineHeight;
-          }
-          else {
-            line = testLine;
-          }
-        }
-        context.fillText(line, x, y);
+		var paragraphs = text.split("\n");
+        
+		for(var m = 0; m < paragraphs.length; m++) {
+			var words = paragraphs[m].split(" ");
+			var line = "";
+			
+			for(var n = 0; n < words.length; n++) {
+			  var testLine = line + words[n] + " ";
+			  var metrics = context.measureText(testLine);
+			  var testWidth = metrics.width;
+			  if(testWidth > maxWidth) {
+				context.fillText(line, x, y);
+				line = words[n] + " ";
+				y += lineHeight;
+			  }
+			  else {
+				line = testLine;
+			  }
+			}
+			context.fillText(line, x, y);
+			y += lineHeight;
+		}
 }
 
 //Global Variables
@@ -497,7 +503,6 @@ var targetSide = Math.floor(Math.random()*2);  //randomly places the target cate
 var experimentData = new Array();
 
 //Instruction texts - this is a messy way to do it but we'll fix it later 
-//figure out how to insert line breaks into the instructions
 var introScreenText;
 var instructionScreenText;
 var endScreenText;
@@ -508,7 +513,7 @@ var targetArray1;
 var targetArray2;
 var alternating;
 var trialsInBlock;
-var	trialCategories;
+var trialCategories;
 var trialInstructions;
 var endInstructions;
 
