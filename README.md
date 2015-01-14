@@ -13,13 +13,16 @@ Requirements:
 -------------
 Server-side: PHP, Python & write permission for web user in directory
 	     
-Client-side: Recent HTML5 and Javascript capable web browser (Firefox & Chrome work well, we have had bugs with Opera)
+Client-side: Recent HTML5 and Javascript capable web browser (Firefox & Chrome work, Opera is buggy)
 
 Setup: 
 -------------
 1) Copy unpacked directory to your server
+
 2) Set write permissions for savefile.php and the output folder (If you do not do this data will not output)
+
 3) Edit config files to make your experiment
+
 4) Enjoy
 
 Creating Your IAT:
