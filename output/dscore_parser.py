@@ -31,7 +31,7 @@ for fn in os.listdir('.'):
 		firstIat = rtArray[ rtArray[:,0] <= 7 ,:]
 		secondIat = rtArray[ rtArray[:,0] > 7 ,:]
 			
-		#throw out subjects where more than 10% of trials are over 300ms		
+		#throw out subjects where more than 10% of trials are less than 300ms		
 		if ( sum(firstIat[:,2] < 300) / len(firstIat[:,1]) ) > 0.1 : 
 			print fn + "   " + "over 10% < 300ms\n"
 			continue
