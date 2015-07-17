@@ -13,7 +13,7 @@ Requirements:
 -------------
 Server-side: PHP, Python & write permission for web user in directory
 	     
-Client-side: Recent HTML5 and Javascript capable web browser (Firefox & Chrome work, Opera is buggy)
+Client-side: Recent HTML5 and Javascript capable web browser (Firefox & Chrome work, Opera & Safari are buggy)
 
 Setup: 
 -------------
@@ -29,4 +29,4 @@ Creating Your IAT:
 -------------------------
 Intro:
 
-The main reason for creating this implementation of the Implicit Association Test is that other open source versions such as Winter Mason's (https://github.com/winteram/IAT) do not currently support common variants of the IAT task such as brief or single target IATs and are not easily modified to do so.  This version was built to allow the user to make any type of IAT simply by modifying the configuration files.  The config files are very powerful but require some in depth knowledge about the IAT procedure to manually set and will crash the whole program if you miss a comma.  Example configuration files for different types of IAT's coming soon.  PHP gui to automatically generate config files for common IAT types coming sometime after.
+The main reason for creating this Implicit Association Test is that other open source versions such as Winter Mason's also excellent implementation (https://github.com/winteram/IAT) do not currently support common variants of the IAT task such as brief or single target IATs and are not easily modified to do so.  This version was built to allow the user to make any type of IAT simply by modifying the configuration files.  The config files are very powerful but require some in depth knowledge about the IAT procedure to manually set and will crash the whole program if you miss a comma.  Template config files for some common IAT variants are provided in the config folder.  Friendly GUI to automatically generate config files for different IAT types coming soon.
