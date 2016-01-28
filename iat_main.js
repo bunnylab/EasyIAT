@@ -68,9 +68,9 @@ function iatBase(categories, target, instruct)  {
   //an image or a text stimuli followed by the actual text or the image location and
   //the correct response type for that category.  Split and store in variables.
   var targetString = target.split(",");    
-  var targetIdentifier = targetString[0];
-  var targetValue = targetString[1];
-  var correctCategory = targetString[2];
+  var targetIdentifier = $.trim(targetString[0]);
+  var targetValue = $.trim(targetString[1]);
+  var correctCategory = $.trim(targetString[2]);
   
   //If target is text draw text if its an image draw an image otherwise stop with an error  
   if(targetIdentifier == 'txt') {
