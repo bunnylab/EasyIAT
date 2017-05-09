@@ -1,0 +1,11 @@
+# Compiled Python Files
+*.pyc
+
+# Leftover Databases
+*.db
+
+# Virtual Environment
+venv/*
+
+# Pycharm config files
+.idea/*

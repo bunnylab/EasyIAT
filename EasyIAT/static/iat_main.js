@@ -271,7 +271,7 @@ function blockController(blockData)  {
   if(blockData.length > 0)  {
     
 	var blockName = blockData[0];
-	var blockConfigFile = 'config/' + blockName + '/' + 'blockConfig.cfg';
+	var blockConfigFile = '/static/config/' + blockName + '/' + 'blockConfig.cfg';
 					
 	//Make a jquery call to load the block configuration and targets then pass them
 	//to the trialController
@@ -323,7 +323,7 @@ function blockController(blockData)  {
 function loadConfig() {
 	
 	$.when(
-		$.get('config/iat_config.cfg', function(data){
+		$.get('/static/config/iat_config.cfg', function(data){
 			mainCfg = JSON.parse(data);
 			
 			//Initialize global variables for config information
