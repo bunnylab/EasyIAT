@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 application = Flask(__name__)
 
@@ -8,6 +9,7 @@ application.config.from_object('config.DebugConfig')
 db = SQLAlchemy(application)
 from EasyIAT import models
 db.create_all()
+ma = Marshmallow(application)
 
 from EasyIAT.views import views
 application.register_blueprint(views)
