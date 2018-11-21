@@ -1,4 +1,5 @@
 from EasyIAT import db
+import json
 
 class Experiment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,6 +11,16 @@ class Experiment(db.Model):
     debriefing = db.relationship("Debriefing", uselist=False, backref="experiment")
     instructions = db.relationship("Instructions", uselist=False, backref="experiment")
     exconfig = db.relationship("Exconfig", backref="experiment", uselist=False)
+
+    @classmethod
+    def fromJson(self, jsondata):
+        return Experiment(**jsondata)
+
+    def __iter__(self):
+        for k, v in self.__dict__.iteritems():
+            if not (k[0] == '_'):
+                yield (k, v)
+
 
 class Exconfig(db.Model):
     id = db.Column(db.Integer, primary_key=True)

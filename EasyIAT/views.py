@@ -1,29 +1,46 @@
-from flask import Blueprint, render_template, jsonify
-from EasyIAT.schemas import block_schema, blocks_schema
-from EasyIAT.models import Block
+from flask import Blueprint, render_template, jsonify, abort, request
+import json
+#from EasyIAT.schemas import block_schema, blocks_schema
+from EasyIAT.models import Experiment
 
 from EasyIAT import db
 
 views = Blueprint('views',__name__,url_prefix='')
 
+# actual iat lives there right now
 @views.route('/')
 def index():
     return render_template('index.html')
 
-@views.route('/test')
-def test():
-    block1 = Block.query.first()
+@views.route('/builder')
+def builder():
+    return render_template('builder.html')
 
-    if block1:
-        return jsonify(block_schema.dump(block1).data)
-    else:
-        return jsonify("didn't have one")
 
-@views.route('/tests')
-def tests():
-    blocks = Block.query.all()
+@views.route('/experiment', methods=['GET', 'POST'])
+def experiments():
 
-    if blocks:
-        return jsonify(blocks_schema.dump(blocks).data)
-    else:
-        return jsonify("didn't have one")
+    if request.method == 'GET':
+        experiments = db.session.query(Experiment.id).all()
+        return jsonify(experiments), 200
+
+    if request.method == 'POST':
+        print(request.get_json())
+        experiment_json = request.get_json()
+        experiment = Experiment.fromJson(experiment_json)
+        if experiment:
+            db.session.add(experiment)
+            db.session.commit()
+            return jsonify(dict(experiment)), 201
+
+
+@views.route('/experiment/<int:id>', methods=['GET', 'PUT'])
+def experiment(id):
+
+    if request.method == 'GET':
+        experiment = db.session.query(Experiment).filter(Experiment.id == id).first()
+
+        if experiment:
+            return jsonify(dict(experiment)), 200
+        else:
+            abort(404)
